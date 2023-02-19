@@ -1,0 +1,26 @@
+<div class="map-controller">
+  <label for="type"> Тип аварии:</label>
+  <select
+    class="type-select"
+    #type
+    name="type"
+    (change)="changeHandler(type.value)"
+  >
+    <option value="all">Все</option>
+    <ng-container *ngFor="let option of accedintType.sort()">
+      <option [value]="option">
+        {{ option }}
+      </option>
+    </ng-container>
+  </select>
+  <div class="details">
+    <ng-container *ngIf="!!activeOption">
+      <div>Количество погибших: {{ activeOption.died || 0 }}</div>
+      <div>Количество раненых: {{ activeOption.wounded || 0 }}</div>
+    </ng-container>
+
+    <ng-container *ngIf="!activeOption">
+      Нажмите на любую точку, чтобы показать ее детали
+    </ng-container>
+  </div>
+</div>
