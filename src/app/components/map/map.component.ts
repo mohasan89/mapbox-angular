@@ -10,6 +10,7 @@ import {
   GeojsonPoinCollection,
   RoadAccidentProperties,
 } from 'src/types/geojson';
+import { customLayer } from './threejsFunctions';
 
 @Component({
   selector: 'app-map',
@@ -155,12 +156,16 @@ export class MapComponent implements OnInit {
 
   private loadMapData() {
     this.map.on('load', () => {
-      this.map.addSource('accidents', {
-        type: 'geojson',
-        data: this.data,
-        generateId: true,
-      });
+      //@ts-ignore
+      this.map.addLayer(customLayer, 'waterway-label');
 
+      // this.map.addSource('accidents', {
+      //   type: 'geojson',
+      //   data: this.data,
+      //   generateId: true,
+      // });
+
+      return;
       const tempCase: string[] = [];
 
       for (let i = 0; i < this.accedintType.length; i++) {
