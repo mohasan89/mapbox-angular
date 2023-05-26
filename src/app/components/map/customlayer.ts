@@ -43,69 +43,72 @@ export const customLayer2 = {
     const loader = new IFCLoader();
     await loader.ifcManager.setWasmPath('assets/wasm/');
 
-    loader.load('/assets/test3.ifc', (ifc) => {
-      this.camera = new THREE.PerspectiveCamera();
-      this.scene = globalScene;
+    loader.load(
+      'https://game.dornadzor-sz.ru/static/testing/model.ifc',
+      (ifc) => {
+        this.camera = new THREE.PerspectiveCamera();
+        this.scene = globalScene;
 
-      const directionalLight = new THREE.DirectionalLight(0xffffff);
-      directionalLight.position.set(0, -70, 100).normalize();
-      this.scene.add(directionalLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff);
+        directionalLight.position.set(0, -70, 100).normalize();
+        this.scene.add(directionalLight);
 
-      const directionalLight2 = new THREE.DirectionalLight(0xffffff);
-      directionalLight2.position.set(0, 70, 100).normalize();
-      this.scene.add(directionalLight2);
+        const directionalLight2 = new THREE.DirectionalLight(0xffffff);
+        directionalLight2.position.set(0, 70, 100).normalize();
+        this.scene.add(directionalLight2);
 
-      console.log(ifc);
-      ifcModels.push(ifc);
-      const group = new THREE.Group();
-      this.scene.add(group);
-      ifc.rotateX(Math.PI / 2);
-      // ifc.rotateY(Math.PI);
-      window.console.log(ifc);
-      // ifc.position.set(
-      //   0.44889307022094727,
-      //   -1.4999999701976776 - 10,
-      //   0.9399831295013428
-      // );
-      // ifc.position.set(-3271422.5, 0, 6630300);
-      // ifc.rotation.x -= Math.PI / 2;
-      // ifc.rotation.x += Math.PI / 2;
-      // ifc.rotation.x += Math.PI / 2;
+        console.log(ifc);
+        ifcModels.push(ifc);
+        const group = new THREE.Group();
+        this.scene.add(group);
+        ifc.rotateX(Math.PI / 2);
+        // ifc.rotateY(Math.PI);
+        window.console.log(ifc);
+        // ifc.position.set(
+        //   0.44889307022094727,
+        //   -1.4999999701976776 - 10,
+        //   0.9399831295013428
+        // );
+        // ifc.position.set(-3271422.5, 0, 6630300);
+        // ifc.rotation.x -= Math.PI / 2;
+        // ifc.rotation.x += Math.PI / 2;
+        // ifc.rotation.x += Math.PI / 2;
 
-      ifc.position.y += 1663000;
-      ifc.position.x += -25057.628;
-      // ifc.position.x += -5000;
-      // 3250000,
-      group.add(ifc);
-      const box = new THREE.Box3().setFromObject(ifc);
-      console.log(box);
-      // group.position.set(+32714 + 31739, 66303, 0);
-      // group.rotation.x = -Math.PI / 2;
-      // group.rotation.y = Math.PI / 2;
+        ifc.position.y += 1663000;
+        ifc.position.x += -25057.628;
+        // ifc.position.x += -5000;
+        // 3250000,
+        group.add(ifc);
+        const box = new THREE.Box3().setFromObject(ifc);
+        console.log(box);
+        // group.position.set(+32714 + 31739, 66303, 0);
+        // group.rotation.x = -Math.PI / 2;
+        // group.rotation.y = Math.PI / 2;
 
-      // // group.position.z += 10;
-      // var cube = new THREE.Mesh(
-      //   new THREE.BoxGeometry(50, 50, 50),
-      //   new THREE.MeshNormalMaterial()
-      // );
-      // // this.scene.add(cube);
-      // let cube1 = cube.clone();
-      // cube1.material = new THREE.MeshNormalMaterial();
-      // cube1.translateX(1000);
-      // this.scene.add(cube1);
+        // // group.position.z += 10;
+        // var cube = new THREE.Mesh(
+        //   new THREE.BoxGeometry(50, 50, 50),
+        //   new THREE.MeshNormalMaterial()
+        // );
+        // // this.scene.add(cube);
+        // let cube1 = cube.clone();
+        // cube1.material = new THREE.MeshNormalMaterial();
+        // cube1.translateX(1000);
+        // this.scene.add(cube1);
 
-      this.map = map;
-      this.renderer = new THREE.WebGLRenderer({
-        canvas: map.getCanvas(),
-        context: gl,
-        antialias: true,
-      });
+        this.map = map;
+        this.renderer = new THREE.WebGLRenderer({
+          canvas: map.getCanvas(),
+          context: gl,
+          antialias: true,
+        });
 
-      this.renderer.autoClear = false;
-      this.raycaster = new THREE.Raycaster();
-      this.raycaster.firstHitOnly = true;
-      globalScene = this.scene;
-    });
+        this.renderer.autoClear = false;
+        this.raycaster = new THREE.Raycaster();
+        this.raycaster.firstHitOnly = true;
+        globalScene = this.scene;
+      }
+    );
   },
   render: async function (gl, matrix) {
     var m = new THREE.Matrix4().fromArray(matrix);
