@@ -1,6 +1,73 @@
 <div id="map"></div>
-<app-map-controller
+<!-- <app-map-controller
   [accedintType]="accedintType"
   [activeOption]="activeOpt"
   (selectionChanged)="selectionHandler($event)"
-></app-map-controller>
+></app-map-controller> -->
+
+<div id="controller">
+  {{ update === 1 ? "loading..." : null }}
+  <ng-container *ngIf="materials.length > 0">
+    <ng-container *ngFor="let material of materials">
+      <div class="material" (click)="toggleMatrial(material)">
+        <div
+          class="box"
+          [ngStyle]="{
+            backgroundColor:
+              'rgb(' +
+              (material?.color?.r * 255).toFixed() +
+              ',' +
+              (material?.color?.g * 255).toFixed() +
+              ',' +
+              (material?.color?.b * 255).toFixed() +
+              ')',
+            color:
+              'rgb(' +
+              ((1 - material?.color?.r) * 255).toFixed() +
+              ',' +
+              ((1 - material?.color?.g) * 255).toFixed() +
+              ',' +
+              ((1 - material?.color?.b) * 255).toFixed() +
+              ')'
+          }"
+        >
+          {{ material?.visible ? "✓" : "X" }}
+        </div>
+        <div>
+          {{ material?.uuid }}
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+
+<div id="info" *ngIf="itemsSelected">
+  {{ itemsSelected.distance | json }}
+  <br />
+  {{ itemsSelected.point | json }}
+  <br />
+  {{ itemsSelected.face | json }}
+  <div
+    class="box"
+    [ngStyle]="{
+      backgroundColor:
+        'rgb(' +
+        (
+          materials[itemsSelected.face?.materialIndex]?.color?.r * 255
+        ).toFixed() +
+        ',' +
+        (
+          materials[itemsSelected.face?.materialIndex]?.color?.g * 255
+        ).toFixed() +
+        ',' +
+        (
+          materials[itemsSelected.face?.materialIndex]?.color?.b * 255
+        ).toFixed() +
+        ')'
+    }"
+  ></div>
+
+  <!-- <div *ngIf="{!!itemsSelected?.props}"> -->
+  {{ itemsSelected?.props | json }}
+  <!-- </div> -->
+</div>

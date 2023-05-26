@@ -10,7 +10,8 @@ import {
   GeojsonPoinCollection,
   RoadAccidentProperties,
 } from 'src/types/geojson';
-import { customLayer } from './threejsFunctions';
+import { customLayer, pick } from './threejsFunctions';
+import { customLayer2, mouse, globalScene, ifcModels } from './customlayer';
 
 @Component({
   selector: 'app-map',
@@ -24,8 +25,16 @@ export class MapComponent implements OnInit {
 
   style = 'mapbox://styles/mapbox/streets-v11';
   map!: mapboxgl.Map;
+  sceneRef: any;
+  update = 1;
+  modeltree: any;
+  sceneModel: any = null;
+
+  models = [];
 
   activeOpt: null | RoadAccidentProperties = null;
+  materials: any[] = [];
+  itemsSelected: any = undefined;
   colorsList = [
     '#334155',
     '#2dd4bf',
@@ -58,7 +67,6 @@ export class MapComponent implements OnInit {
     '#facc15',
     '#a3e635',
     '#4ade80',
-
     '#60a5fa',
     '#818cf8',
     '#a78bfa',
@@ -80,57 +88,55 @@ export class MapComponent implements OnInit {
       accessToken: environment.mapbox.accessToken,
       container: 'map',
       style: this.style,
-      zoom: 5,
-      center: [30.3351, 59.9343],
+      zoom: 11,
+      center: [29.24, 59.55],
     });
     this.map.addControl(
       new mapboxgl.NavigationControl({ showZoom: true, showCompass: false })
     );
 
-    this.map.on('click', (e) => {
-      const features = this.map.queryRenderedFeatures(e.point, {
-        layers: ['car-accidents'],
-      });
+    // this.map.on('click', (e) => {
+    //   const features = this.map.queryRenderedFeatures(e.point);
+    //   console.log(features);
+    //   pick(e);
 
-      if (!features.length) {
-        return;
-      }
+    //   if (!features.length) {
+    //     return;
+    //   }
 
-      const feature: any = features[0];
+    //   const feature: any = features[0];
+    // });
 
-      this.activeOpt = {
-        type: feature.properties?.type || '',
-        died: feature.properties?.died || 0,
-        wounded: feature.properties?.wounded || 0,
-      };
-    });
+    // this.map.on('mousemove', 'car-accidents', (e) => {
+    //   if (e.features?.[0]?.id) {
+    //     this.map.setFeatureState(
+    //       { source: 'accidents', id: e.features?.[0]?.id },
+    //       { hover: true }
+    //     );
+    //     if (this.hoveredItem && this.hoveredItem !== e.features?.[0]?.id) {
+    //       this.map.setFeatureState(
+    //         { source: 'accidents', id: this.hoveredItem },
+    //         { hover: false }
+    //       );
+    //     }
+    //     this.hoveredItem = e.features?.[0]?.id || null;
+    //   }
+    // });
 
-    this.map.on('mousemove', 'car-accidents', (e) => {
-      if (e.features?.[0]?.id) {
-        this.map.setFeatureState(
-          { source: 'accidents', id: e.features?.[0]?.id },
-          { hover: true }
-        );
-        if (this.hoveredItem && this.hoveredItem !== e.features?.[0]?.id) {
-          this.map.setFeatureState(
-            { source: 'accidents', id: this.hoveredItem },
-            { hover: false }
-          );
-        }
-        this.hoveredItem = e.features?.[0]?.id || null;
-      }
-    });
-
-    this.map.on('mouseleave', 'car-accidents', (e) => {
-      if (this.hoveredItem) {
-        this.map.setFeatureState(
-          { source: 'accidents', id: this.hoveredItem },
-          { hover: false }
-        );
-      }
-    });
+    // this.map.on('mouseleave', 'car-accidents', (e) => {
+    //   if (this.hoveredItem) {
+    //     this.map.setFeatureState(
+    //       { source: 'accidents', id: this.hoveredItem },
+    //       { hover: false }
+    //     );
+    //   }
+    // });
 
     this.getData();
+  }
+
+  toggleMatrial(matrial: any) {
+    matrial.visible = !matrial.visible;
   }
 
   private getData() {
@@ -157,15 +163,42 @@ export class MapComponent implements OnInit {
   private loadMapData() {
     this.map.on('load', () => {
       //@ts-ignore
-      this.map.addLayer(customLayer, 'waterway-label');
+      this.map.addLayer(customLayer2);
 
-      // this.map.addSource('accidents', {
-      //   type: 'geojson',
-      //   data: this.data,
-      //   generateId: true,
-      // });
+      this.sceneRef = globalScene;
+      this.models = ifcModels;
+      setTimeout(() => {
+        // this.sceneModel = this.sceneRef?.children?.find(
+        //   (i: any) => i.type === 'Group'
+        // )?.children?.[0]
+
+        this.materials = globalScene?.children?.find(
+          (i) => i.type === 'Group'
+          //@ts-ignore
+        )?.children?.[0]?.material;
+
+        this.update = this.update + 1;
+      }, 5000);
+
+      this.map.on('mousemove', (event) => {
+        mouse.x = (event.point.x / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.point.y / window.innerHeight) * 2 + 1;
+        this.map.triggerRepaint();
+      });
+
+      this.map.on('click', (event) => {
+        console.log(customLayer2.results);
+        this.itemsSelected = customLayer2.results;
+      });
 
       return;
+
+      this.map.addSource('accidents', {
+        type: 'geojson',
+        data: this.data,
+        generateId: true,
+      });
+
       const tempCase: string[] = [];
 
       for (let i = 0; i < this.accedintType.length; i++) {
