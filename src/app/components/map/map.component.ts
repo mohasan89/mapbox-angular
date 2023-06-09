@@ -89,7 +89,7 @@ export class MapComponent implements OnInit {
       container: 'map',
       style: this.style,
       zoom: 11,
-      center: [29.24, 59.55],
+      center: [32.122746 - 0.9425, 59.86248846 + 0.009],
     });
     this.map.addControl(
       new mapboxgl.NavigationControl({ showZoom: true, showCompass: false })
@@ -178,7 +178,7 @@ export class MapComponent implements OnInit {
         )?.children?.[0]?.material;
 
         this.update = this.update + 1;
-      }, 5000);
+      }, 10000);
 
       this.map.on('mousemove', (event) => {
         mouse.x = (event.point.x / window.innerWidth) * 2 - 1;

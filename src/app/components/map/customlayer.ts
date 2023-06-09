@@ -7,10 +7,11 @@ export const ifcModels = [];
 export const mouse = new THREE.Vector4(-1000, -1000, 1, 1);
 export let globalScene = new THREE.Scene();
 
-// const modelOrigin = [28.5120217, 0.0007375];
-const modelOrigin = [0, 0];
+// const modelOrigin = [46.475372, 0.09632];
+// const modelOrigin = [0, 0];
+const modelOrigin = [32.122746 - 0.943, 59.86248846 + 0.009];
 const modelAltitude = 0;
-const modelRotate = [Math.PI / 2, 0, Math.PI / 2];
+const modelRotate = [Math.PI / 2, 0, 0];
 
 const modelAsMercatorCoordinate = MercatorCoordinate.fromLngLat(
   modelOrigin,
@@ -45,10 +46,10 @@ export const customLayer2 = {
 
     loader.load(
       'https://game.dornadzor-sz.ru/static/testing/model.ifc',
+      // '/assets/test1.ifc',
       (ifc) => {
         this.camera = new THREE.PerspectiveCamera();
         this.scene = globalScene;
-
         const directionalLight = new THREE.DirectionalLight(0xffffff);
         directionalLight.position.set(0, -70, 100).normalize();
         this.scene.add(directionalLight);
@@ -69,13 +70,12 @@ export const customLayer2 = {
         //   -1.4999999701976776 - 10,
         //   0.9399831295013428
         // );
-        // ifc.position.set(-3271422.5, 0, 6630300);
         // ifc.rotation.x -= Math.PI / 2;
         // ifc.rotation.x += Math.PI / 2;
         // ifc.rotation.x += Math.PI / 2;
 
-        ifc.position.y += 1663000;
-        ifc.position.x += -25057.628;
+        ifc.position.y += -6628863;
+        ifc.position.x += -3263028;
         // ifc.position.x += -5000;
         // 3250000,
         group.add(ifc);
@@ -216,3 +216,6 @@ export const customLayer2 = {
     }
   },
 };
+
+// "PROJCRS[\"63_C3\",BASEGEOGCRS[\"Pulkovo 1942\",DATUM[\"Pulkovo 1942\",ELLIPSOID[\"Krassowsky 1940\",6378245,298.3,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6284]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"Degree\",0.0174532925199433]]],CONVERSION[\"unnnamed (Gauss Kruger)\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"Degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",30.95,ANGLEUNIT[\"Degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",1,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",3250000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-11057.63,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]]"
+// +proj=tmerc +lat_0=0 +lon_0=30.95 +k=1 +x_0=3250000 +y_0=-11057.63 +ellps=krass +units=m +no_defs

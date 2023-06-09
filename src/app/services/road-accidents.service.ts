@@ -14,7 +14,7 @@ export class RoadAccidentsService {
 
   public fetchData() {
     return this.http.get<GeojsonPoinCollection<RoadAccidentProperties>>(
-      '/assets/data.geojson'
+      'assets/data.geojson'
     );
   }
 }
